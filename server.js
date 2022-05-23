@@ -7,7 +7,6 @@ const app = express()
 const productos = new ClaseProductos('./public/productos.txt')
 
 app.use(express.urlencoded({extended: true}))
-app.use(express.static('public'))
 app.use(express.json())
 
 const admin = true
@@ -15,25 +14,28 @@ const admin = true
 const routerProductos = new Router()
 const routerCarrito = new Router()
 
-routerProductos.use(express.json())
-routerCarrito.use(express.json())
+app.use(express.static('public'))
 
 app.use('/api/productos', routerProductos)
 app.use('/api/carrito', routerCarrito)
 
+routerProductos.use(express.json())
+routerCarrito.use(express.json())
+
 /* SECCION PARA LOS PRIDUCTOS */
 
 routerProductos.get('/:id?', (req , res) => {
-    const reqId = req.params
-    if (productos.lenght <= 0) {
+    let {id} = req.params
+    const verificador = productos.getAll()
+    if (verificador.length <= 0) {
         const error = (JSON.stringify({error:'No tiene ningun producto guardado'}))
         return res.send(error)
-    }
-    
-    if (reqId) {
-        res.send(productos.getById(reqId))
     } else {
-        res.send(productos.getAll())
+        if (Number(id) > 0) {
+            res.send(productos.getById(id))
+        } else {
+            res.send(productos.getAll())
+        }
     }
 } )
 

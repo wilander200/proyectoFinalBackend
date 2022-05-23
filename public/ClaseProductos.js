@@ -36,26 +36,16 @@ class ClaseProductos {
     }
 
     getById(id) {
-        fs.readFile(this.file, 'utf-8', (error, contenido)=>{
-            if (error) {
-                console.log("hubo un error en la lectura del archivo");
-            } else {
-                let dato =  JSON.parse(contenido);
-                const findProduct = dato.find(prod => prod.id === id)
-                console.log(findProduct);
+        const arrayProductos = fs.readFileSync(this.file, 'utf-8')
+            let dato =  JSON.parse(arrayProductos);
+            const findProduct = dato.find(prod => prod.id === id)
+            return (findProduct);
             }
-        })
-    }
 
-    getAll(cb) {
-        fs.readFile(this.file, 'utf-8', (error, contenido)=>{
-            if (error) {
-                console.log("hubo un error en la lectura del archivo");
-            } else {
-                let dato =  JSON.parse(contenido);
-                cb(dato)
-            }
-        })
+    getAll() {
+        const arrayProductos = fs.readFileSync(this.file, 'utf-8')
+        let dato =  JSON.parse(arrayProductos);
+        return dato
     }
 
     deleteByIdNumber(id){
