@@ -9,7 +9,7 @@ const productos = new ClaseProductos('./public/productos.txt')
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
-const admin = true
+const admin = false
 
 const routerProductos = new Router()
 const routerCarrito = new Router()
@@ -43,7 +43,7 @@ routerProductos.post('/', (req , res) => {
     if (admin) {
         producto = req.body
         productos.saveProducto(producto)
-        res.send(productos)
+        res.send(productos.getAll())
     } else {
         const error = (JSON.stringify({error:'401' , descripcion: 'El usuario no posee los permisos para accesder a la direccion /api/productos y realizar un POST'}))
         return res.send(error)
@@ -55,18 +55,18 @@ routerProductos.put('/:id', (req , res) => {
         let {id} = req.params
         const producto = productos.saveProductoById(id , req.body)
         if (producto === undefined) {
-            const error = (JSON.stringify({error:'401' , descripcion: 'El usuario no posee los permisos para accesder a la direccion /api/productos y realizar un PUT'}))
+            const error = (JSON.stringify({error:'Producto no encontrado'}))
             return res.send(error)
         }
         res.send(productos)
     } else {
-        const error = (JSON.stringify({error:'USTED NO POSEE LOS PERMISOS PARA REALIZAR ESTA OPERACION'}))
+        const error = (JSON.stringify({error:'401' , descripcion: 'El usuario no posee los permisos para accesder a la direccion /api/productos y realizar un PUT'}))
         return res.send(error)
     }
 })
 
 routerProductos.delete('/:id', (req , res) => {
-    if (condition) {
+    if (admin) {
         let {id} = req.params
         const producto = productos.deleteByIdNumber(id)
         if (producto === undefined) {

@@ -5,7 +5,7 @@ class ClaseProductos {
         this.file = file;
     }
 
-    saveObject(name, description, codigo, price, stock, thumbnail) {
+    saveProducto(name, description, codigo, price, stock, thumbnail) {
         fs.readFile(this.file, 'utf-8', (error, contenido)=>{
             if (error) {
                 console.log("hubo un error en la lectura del archivo asignado");
