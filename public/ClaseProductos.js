@@ -5,36 +5,6 @@ class ClaseProductos {
         this.file = file;
     }
 
-    saveProducto(name, description, codigo, price, stock, thumbnail) {
-        fs.readFile(this.file, 'utf-8', (error, contenido)=>{
-            if (error) {
-                console.log("hubo un error en la lectura del archivo asignado");
-            } else {
-                let dato = JSON.parse(contenido);
-                let id
-                if (contenido.length == 0 ) {
-                    id = 0;
-                } else {
-                    id = dato[dato.length-1].id;
-                }
-                id++
-                const fecha = new Date()
-                const date = fecha.toLocaleDateString()
-                const hora = fecha.toLocaleTimeString()
-                const timestamp = {fecha , hora}
-                dato.push({id: id, timestamp: timestamp,  name: name, description: description, codigo: codigo, price: price, stock: stock, thumbnail: thumbnail})
-                fs.writeFile(this.file , JSON.stringify(dato, null, 2), error => {
-                    if (error) {
-                        console.log("hubo un error al escribir")
-                    } else {
-                        console.log("se pudo usar el SaveObject correctamente")
-                    }
-                }
-                )
-            }
-        })
-    }
-
     getById(id) {
         const arrayProductos = fs.readFileSync(this.file, 'utf-8')
             let dato =  JSON.parse(arrayProductos);
@@ -47,6 +17,31 @@ class ClaseProductos {
         let dato =  JSON.parse(arrayProductos);
         return dato
     }
+
+    saveProducto({name, description, codigo, price, stock, thumbnail}) {
+        const contenido = fs.readFileSync(this.file, 'utf-8')
+        let dato = JSON.parse(contenido);
+        let id
+        if (dato.length == 0 ) {
+            id = 0;
+        } else {
+            id = dato[dato.length-1].id;
+        }
+        id++
+        const fecha = new Date()
+        const date = fecha.toLocaleDateString()
+        const hora = fecha.toLocaleTimeString()
+        const timestamp = {fecha , hora}
+        dato.push({id: id, timestamp: timestamp,  name: name, description: description, codigo: codigo, price: price, stock: stock, thumbnail: thumbnail})
+        fs.writeFile(this.file , JSON.stringify(dato, null, 2), error => {
+            if (error) {
+                console.log("hubo un error al escribir")
+            } else {
+                console.log("se pudo usar el SaveObject correctamente")
+            }
+        }
+        )
+            }
 
     deleteByIdNumber(id){
         fs.readFile(this.file, 'utf-8', (error, contenido)=>{

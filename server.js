@@ -9,7 +9,7 @@ const productos = new ClaseProductos('./public/productos.txt')
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
-const admin = false
+const admin = true
 
 const routerProductos = new Router()
 const routerCarrito = new Router()
@@ -32,7 +32,7 @@ routerProductos.get('/:id?', (req , res) => {
         return res.send(error)
     } else {
         if (Number(id) > 0) {
-            res.send(productos.getById(id))
+            res.send(productos.getById(Number(id)))
         } else {
             res.send(productos.getAll())
         }
@@ -43,7 +43,7 @@ routerProductos.post('/', (req , res) => {
     if (admin) {
         producto = req.body
         productos.saveProducto(producto)
-        res.send(productos.getAll())
+        res.send('Se agrego el producto correctamente')
     } else {
         const error = (JSON.stringify({error:'401' , descripcion: 'El usuario no posee los permisos para accesder a la direccion /api/productos y realizar un POST'}))
         return res.send(error)
