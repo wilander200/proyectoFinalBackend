@@ -43,7 +43,7 @@ routerProductos.post('/', (req , res) => {
     if (admin) {
         producto = req.body
         productos.saveProducto(producto)
-        res.send('Se agrego el producto correctamente')
+        res.send(productos.getAll())
     } else {
         const error = (JSON.stringify({error:'401' , descripcion: 'El usuario no posee los permisos para accesder a la direccion /api/productos y realizar un POST'}))
         return res.send(error)
@@ -54,11 +54,12 @@ routerProductos.put('/:id', (req , res) => {
     if (admin) {        
         let {id} = req.params
         const producto = productos.saveProductoById(id , req.body)
+        console.log(producto)
         if (producto === undefined) {
             const error = (JSON.stringify({error:'Producto no encontrado'}))
             return res.send(error)
         }
-        res.send(productos)
+        res.send(productos.getAll())
     } else {
         const error = (JSON.stringify({error:'401' , descripcion: 'El usuario no posee los permisos para accesder a la direccion /api/productos y realizar un PUT'}))
         return res.send(error)

@@ -28,12 +28,9 @@ class ClaseProductos {
             id = dato[dato.length-1].id;
         }
         id++
-        const fecha = new Date()
-        const date = fecha.toLocaleDateString()
-        const hora = fecha.toLocaleTimeString()
-        const timestamp = {fecha , hora}
+        const timestamp = Date.now()
         dato.push({id: id, timestamp: timestamp,  name: name, description: description, codigo: codigo, price: price, stock: stock, thumbnail: thumbnail})
-        fs.writeFile(this.file , JSON.stringify(dato, null, 2), error => {
+        fs.writeFileSync(this.file , JSON.stringify(dato, null, 2), error => {
             if (error) {
                 console.log("hubo un error al escribir")
             } else {
@@ -42,6 +39,30 @@ class ClaseProductos {
         }
         )
             }
+
+        saveProductoById(id, {name, description, codigo, price, stock, thumbnail}) {
+            const arrayProductos = fs.readFileSync(this.file, 'utf-8')
+            let dato =  JSON.parse(arrayProductos);
+
+            const pos = dato.findIndex(prod => prod.id === parseInt(id))
+            if (pos < 0){
+                return undefined
+            }
+
+            const timestamp = Date.now()
+            const nuevoProducto = {id: parseInt(id) , timestamp: timestamp,  name , description, codigo,  price , stock,  thumbnail}
+            dato.splice(pos, 1 , nuevoProducto)
+            fs.writeFileSync(this.file , JSON.stringify(dato, null, 2), error => {
+                if (error) {
+                    console.log("hubo un error al escribir")
+                } else {
+                    console.log("se pudo usar el SaveObject correctamente")
+                }
+            }
+            )
+            return dato
+
+        }
 
     deleteByIdNumber(id){
         fs.readFile(this.file, 'utf-8', (error, contenido)=>{

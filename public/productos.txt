@@ -2,8 +2,8 @@
   {
     "id": 1,
     "timestamp": {
-      "fecha": "2022-05-23T01:25:19.005Z",
-      "hora": "21:25:19"
+      "fecha": "2022-05-23T01:36:37.168Z",
+      "hora": "21:36:37"
     },
     "name": "Bicicleta",
     "description": "Bicicleta aro 29 de montaña",
@@ -14,22 +14,19 @@
   },
   {
     "id": 2,
-    "timestamp": {
-      "fecha": "2022-05-23T01:25:36.537Z",
-      "hora": "21:25:36"
-    },
-    "name": "Bicicleta",
-    "description": "Bicicleta aro 29 de montaña",
-    "codigo": "MTB2020",
-    "price": 12300,
-    "stock": 30,
-    "thumbnail": "foto bici"
+    "timestamp": 1653270892136,
+    "name": "avion",
+    "description": "Moto electrica de alta velocidad",
+    "codigo": "MOTOHS",
+    "price": 1500,
+    "stock": 2,
+    "thumbnail": "foto avion"
   },
   {
     "id": 3,
     "timestamp": {
-      "fecha": "2022-05-23T01:25:55.151Z",
-      "hora": "21:25:55"
+      "fecha": "2022-05-23T01:36:51.925Z",
+      "hora": "21:36:51"
     },
     "name": "Bicicleta",
     "description": "Bicicleta aro 29 de montaña",
