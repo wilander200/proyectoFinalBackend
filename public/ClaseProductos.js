@@ -8,7 +8,13 @@ class ClaseProductos {
     getById(id) {
         const arrayProductos = fs.readFileSync(this.file, 'utf-8')
             let dato =  JSON.parse(arrayProductos);
-            const findProduct = dato.find(prod => prod.id === id)
+
+            const pos = dato.findIndex(prod => prod.id === parseInt(id))
+            if (pos < 0){
+                return undefined
+            }
+
+            const findProduct = dato.find(prod => prod.id === parseInt(id))
             return (findProduct);
             }
 
@@ -65,26 +71,26 @@ class ClaseProductos {
         }
 
     deleteByIdNumber(id){
-        fs.readFile(this.file, 'utf-8', (error, contenido)=>{
-            if (error) {
-                console.log("hubo un error en la lectura del archivo");
-            } else {
-                let dato =  JSON.parse(contenido);
-                const findProduct = dato.filter(prod => prod.id !== id)
-                fs.writeFile(this.file , JSON.stringify(findProduct, null, 2), error => {
-                    if (error) {
-                        console.log("hubo un error al escribir")
-                    } else {
-                        console.log("se pudo borrar el item con el ID indicado")
-                    }
-                }
-                )
+        const arrayProductos = fs.readFileSync(this.file, 'utf-8')
+            let dato =  JSON.parse(arrayProductos);
+
+            const pos = dato.findIndex(prod => prod.id === parseInt(id))
+            if (pos < 0){
+                return undefined
             }
-        })
-    }
 
-    }
-
+            const findProduct = dato.filter(prod => prod.id !== parseInt(id))
+            fs.writeFileSync(this.file , JSON.stringify(findProduct, null, 2), error => {
+                if (error) {
+                    console.log("hubo un error al borrar")
+                } else {
+                    console.log("se pudo borrar el item con el ID indicado")
+                }
+            }
+            )
+            return dato
+        }
+}
 
 module.exports = ClaseProductos;
 

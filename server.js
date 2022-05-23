@@ -31,8 +31,13 @@ routerProductos.get('/:id?', (req , res) => {
         const error = (JSON.stringify({error:'No tiene ningun producto guardado'}))
         return res.send(error)
     } else {
-        if (Number(id) > 0) {
-            res.send(productos.getById(Number(id)))
+        if (parseInt(id) > 0) {
+            const producto = productos.getById(id)
+        if (producto === undefined) {
+            const error = (JSON.stringify({error:'Producto no encontrado'}))
+            return res.send(error)
+        }
+            res.send(productos.getById(id))
         } else {
             res.send(productos.getAll())
         }
@@ -54,7 +59,6 @@ routerProductos.put('/:id', (req , res) => {
     if (admin) {        
         let {id} = req.params
         const producto = productos.saveProductoById(id , req.body)
-        console.log(producto)
         if (producto === undefined) {
             const error = (JSON.stringify({error:'Producto no encontrado'}))
             return res.send(error)
@@ -74,14 +78,22 @@ routerProductos.delete('/:id', (req , res) => {
             const error = (JSON.stringify({error:'Producto no encontrado'}))
             return res.send(error)
         }
-        res.send(producto)
+        res.send(productos.getAll())
     } else {
         const error = (JSON.stringify({error:'401' , descripcion: 'El usuario no posee los permisos para accesder a la direccion /api/productos y realizar un DELETE'}))
         return res.send(error)
     }
 })
 
+app.use((req, res) => {
+    res.status(404).send({error: "Error 404", descripcion: "Ruta no admitida"})
+})
+
 /* SECCION PARA EL CARRITO */
+
+
+
+
 
 
 
