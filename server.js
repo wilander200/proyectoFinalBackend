@@ -1,10 +1,12 @@
 const express = require('express')
 const {Router} = express
 const ClaseProductos = require('./public/ClaseProductos.js')
+const ClaseCarrito = require('./public/ClaseCarrito.js')
 
 const app = express()
 
 const productos = new ClaseProductos('./public/productos.txt')
+const carritos = new ClaseCarrito('./public/carrito.txt')
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
@@ -85,17 +87,22 @@ routerProductos.delete('/:id', (req , res) => {
     }
 })
 
+/* SECCION PARA EL CARRITO */
+
+routerCarrito.post('/', (req , res) => {
+    let id = carritos.saveCarrito()
+    res.send(`El ID del carrito es: ${id}`)
+})
+
+
+
+
+
+/* CONTROL DEL ERROR DE LA RUTA */
+
 app.use((req, res) => {
     res.status(404).send({error: "Error 404", descripcion: "Ruta no admitida"})
 })
-
-/* SECCION PARA EL CARRITO */
-
-
-
-
-
-
 
 const PORT = process.env.PORT || 8080
 
