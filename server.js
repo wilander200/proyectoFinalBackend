@@ -94,7 +94,29 @@ routerCarrito.post('/', (req , res) => {
     res.send(`El ID del carrito es: ${id}`)
 })
 
+routerCarrito.delete('/:id', (req , res) => {
+        let {id} = req.params
+        const carrito = carritos.deleteCarritoById(id)
+        if (carrito === undefined) {
+            const error = (JSON.stringify({error:'Producto no encontrado'}))
+            return res.send(error)
+        }
+        res.send(`Se elimina el carrito con el ID: ${id}`)
+})
 
+routerCarrito.get('/:id/productos', (req , res) => {
+    let {id, productos} = req.params
+    if (parseInt(id) > 0) {
+        const producto = carritos.getCarritoById(id)
+        if (producto === undefined) {
+            const error = (JSON.stringify({error:'Producto no encontrado'}))
+            return res.send(error)
+        }
+        res.send(carritos.getCarritoById(id))
+    } else {
+        res.send(`No se puede colocar un ID menor o igual a cero (0)`)
+    }
+});
 
 
 

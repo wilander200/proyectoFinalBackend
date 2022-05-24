@@ -29,20 +29,39 @@ class ClaseCarrito {
         return id
             }
 
+    deleteCarritoById(id){
+        const arrayProductos = fs.readFileSync(this.file, 'utf-8')
+        let dato =  JSON.parse(arrayProductos);
 
-    //getById(id) {
-    //    const arrayProductos = fs.readFileSync(this.file, 'utf-8')
-    //        let dato =  JSON.parse(arrayProductos);
-//
-    //        const pos = dato.findIndex(prod => prod.id === parseInt(id))
-    //        if (pos < 0){
-    //            return undefined
-    //        }
-//
-    //        const findProduct = dato.find(prod => prod.id === parseInt(id))
-    //        return (findProduct);
-    //        }
-//
+        const pos = dato.findIndex(prod => prod.id === parseInt(id))
+        if (pos < 0){
+            return undefined
+        }
+
+        const findProduct = dato.filter(prod => prod.id !== parseInt(id))
+        fs.writeFileSync(this.file , JSON.stringify(findProduct, null, 2), error => {
+            if (error) {
+                console.log("hubo un error al borrar")
+            } else {
+                console.log("se pudo borrar el item con el ID indicado")
+            }
+        }
+        )
+        return dato
+    }
+
+    getCarritoById(id) {
+        const arrayCarritos = fs.readFileSync(this.file, 'utf-8')
+            let dato =  JSON.parse(arrayCarritos);
+
+            const pos = dato.findIndex(dat => dat.id === parseInt(id))
+            if (pos < 0){
+                return undefined
+            }
+            const findCarrito = dato.find(prod => prod.id === parseInt(id))
+            return (findCarrito);
+            }
+
     //getAll() {
     //    const arrayProductos = fs.readFileSync(this.file, 'utf-8')
     //    let dato =  JSON.parse(arrayProductos);
