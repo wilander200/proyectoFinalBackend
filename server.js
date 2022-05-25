@@ -118,7 +118,12 @@ routerCarrito.get('/:id/productos', (req , res) => {
     }
 });
 
-
+routerCarrito.post('/:id/productos', (req , res) => {
+        let {id} = req.params
+        let producto = req.body
+        carritos.saveProductoInCarrito({id, producto})
+        res.send(carritos.getCarritoById(id))
+})
 
 /* CONTROL DEL ERROR DE LA RUTA */
 

@@ -1,9 +1,9 @@
 const fs = require("fs");
-const { domainToASCII } = require("url");
 
 class ClaseCarrito {
     constructor (file){
         this.file = file;
+        this.newProducto = []
     }
 
     saveCarrito() {
@@ -60,6 +60,34 @@ class ClaseCarrito {
             }
             const findCarrito = dato.find(prod => prod.id === parseInt(id))
             return (findCarrito);
+            }
+    
+    saveProductoInCarrito({id , producto}) {
+        const contenido = fs.readFileSync(this.file, 'utf-8')
+
+        let dato = JSON.parse(contenido);
+        const pos = dato.findIndex(prod => prod.id === parseInt(id))
+
+        if (pos < 0){
+            return undefined
+        }
+        
+        const findCarrito = dato.find(prod => prod.id === parseInt(id))
+        const timestamp = findCarrito.timestamp
+
+        this.newProducto.push(producto)
+
+        const newCarrito = {id: parseInt(id), timestamp , productos: this.newProducto}
+        dato.splice(pos, 1 , newCarrito)
+
+        fs.writeFileSync(this.file , JSON.stringify(dato, null, 2), error => {
+            if (error) {
+                console.log("hubo un error al escribir el carrito")
+            } else {
+                console.log("se pudo crear el carrito correctamente")
+            }
+        }
+        )
             }
 
     //getAll() {
