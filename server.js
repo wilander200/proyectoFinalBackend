@@ -125,6 +125,16 @@ routerCarrito.post('/:id/productos', (req , res) => {
         res.send(carritos.getCarritoById(id))
 })
 
+routerCarrito.delete('/:id/productos/:id_prod', (req , res) => {
+    let {id , id_prod} = req.params
+    const carrito = carritos.deleteProdInCarrito(id , id_prod)
+    if (carrito === undefined) {
+        const error = (JSON.stringify({error:'Producto no encontrado en el carrito'}))
+        return res.send(error)
+    }
+    res.send(`Se elimina el producto con ID: ${id_prod}, del carrito con el ID: ${id}`)
+})
+
 /* CONTROL DEL ERROR DE LA RUTA */
 
 app.use((req, res) => {
