@@ -1,0 +1,8 @@
+var admin = require("firebase-admin");
+
+var serviceAccount = require("aca va la conexion al models de firebase");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+

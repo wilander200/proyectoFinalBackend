@@ -1,4 +1,3 @@
-const fs = require("fs");
 
 class ClaseProductos {
     constructor (file){
