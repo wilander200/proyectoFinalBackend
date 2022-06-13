@@ -20,6 +20,8 @@
   "homepage": "https://github.com/wilander200/proyectoFinalBackend#readme",
   "dependencies": {
     "express": "^4.18.1",
-    "express-router": "^0.0.1"
+    "express-router": "^0.0.1",
+    "firebase-admin": "^10.3.0",
+    "mongoose": "^6.3.6"
   }
 }
