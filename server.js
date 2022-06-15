@@ -35,8 +35,7 @@ routerProductos.get('/:id?', async function(req , res) {
     let {id} = req.params
     //const verificador = productos.getAll()
     const verificador = await productosMDB.getAll()
-    console.log('lo que viene del constructor ' , verificador)
-    if (/* verificador.length <= 0 */ false) {
+    if (verificador.length <= 0) {
         const error = (JSON.stringify({error:'No tiene ningun producto guardado'}))
         return res.send(error)
     } else {
@@ -48,7 +47,7 @@ routerProductos.get('/:id?', async function(req , res) {
             return res.send(error)
         }
             //res.send(productos.getById(id))
-            res.send(await productosMDB.getById(id))
+            res.jsonp(await productosMDB.getById(id))
         } else {
             //res.send(productos.getAll())
             res.jsonp(await productosMDB.getAll())
@@ -56,47 +55,47 @@ routerProductos.get('/:id?', async function(req , res) {
     }
 } )
 
-routerProductos.post('/', (req , res) => {
+routerProductos.post('/', async (req , res) => {
     if (admin) {
         const producto = req.body
         //productos.saveProducto(producto)
-        productosMDB.saveProducto(producto)
+        await productosMDB.saveProducto(producto)
         //res.send(productos.getAll())
-        res.send(productosMDB.getAll())
+        res.jsonp(await productosMDB.getAll())
     } else {
         const error = (JSON.stringify({error:'401' , descripcion: 'El usuario no posee los permisos para accesder a la direccion /api/productos y realizar un POST'}))
         return res.send(error)
     }
 })
 
-routerProductos.put('/:id', (req , res) => {
+routerProductos.put('/:id', async (req , res) => {
     if (admin) {        
         let {id} = req.params
         //const producto = productos.saveProductoById(id , req.body)
-        const producto = productosMDB.saveProductoById(id , req.body)
+        const producto = await productosMDB.saveProductoById(id , req.body)
         if (producto === undefined) {
             const error = (JSON.stringify({error:'Producto no encontrado'}))
             return res.send(error)
         }
         //res.send(productos.getAll())
-        res.send(productosMDB.getAll())
+        res.jsonp(await productosMDB.getAll())
     } else {
         const error = (JSON.stringify({error:'401' , descripcion: 'El usuario no posee los permisos para accesder a la direccion /api/productos y realizar un PUT'}))
         return res.send(error)
     }
 })
 
-routerProductos.delete('/:id', (req , res) => {
+routerProductos.delete('/:id', async (req , res) => {
     if (admin) {
         let {id} = req.params
         //const producto = productos.deleteByIdNumber(id)
-        const producto = productosMDB.deleteByIdNumber(id)
+        const producto = await productosMDB.deleteByIdNumber(id)
         if (producto === undefined) {
             const error = (JSON.stringify({error:'Producto no encontrado'}))
             return res.send(error)
         }
         //res.send(productos.getAll())
-        res.send(productosMDB.getAll())
+        res.jsonp( await productosMDB.getAll())
     } else {
         const error = (JSON.stringify({error:'401' , descripcion: 'El usuario no posee los permisos para accesder a la direccion /api/productos y realizar un DELETE'}))
         return res.send(error)

@@ -22,27 +22,18 @@ class ClaseProductos {
         
     }
 
-    getById(id) {
-        const findProduct = models.productos.find({id: parseInt(id)})
+    async getById(id) {
+        const findProduct = await models.productos.find({id: parseInt(id)})
             return (findProduct);
             }
 
-    getAll() {
-        const getAllProductos = function(cb){ 
-            models.productos.find({}).exec(function (err, docs) { 
-            docs.reverse()
-            cb(err, docs);
-          })
-    }
-        getAllProductos(function(err, productos){
-            if (err) {return res.status(500).send({error: err})}
-            return productos
-        })
+    async getAll() {
+        const productos = await models.find()
+        return productos
     }
 
-    saveProducto({name, description, codigo, price, stock, thumbnail}) {
-        const dato = this.getAll();
-        console.log('el dato',dato);
+    async saveProducto({name, description, codigo, price, stock, thumbnail}) {
+        const dato = await this.getAll();
         let id
         if (dato.length == 0 ) {
             id = 0;
@@ -51,22 +42,29 @@ class ClaseProductos {
         }
         id++
         const timestamp = Date.now()
-        const nuevoProducto = new models.productos({id: id, 
+        const nuevoProducto = await models.create({id: id, 
             timestamp: timestamp,  
             name: name, 
             description: description, 
             codigo: codigo, 
             price: price, 
             stock: stock, 
-            thumbnail: thumbnail}).save()
+            thumbnail: thumbnail})
 
         console.log("se pudo usar el SaveObject correctamente")
         return nuevoProducto;
     }
 
-        saveProductoById(id, {name, description, codigo, price, stock, thumbnail}) {
+    async saveProductoById(id, {name, description, codigo, price, stock, thumbnail}) {
             const timestamp = Date.now()
-            const productoUpdate = models.productos.updateOne({id: parseInt(id)} , 
+
+            const dato = await this.getAll()
+            const pos = dato.findIndex(prod => prod.id === parseInt(id))
+            if (pos < 0){
+                return undefined
+            }
+//
+            const productoUpdate = await models.updateOne({id: parseInt(id)} , 
             {$set: {timestamp: timestamp,  
                 name: name , 
                 description: description, 
@@ -79,8 +77,13 @@ class ClaseProductos {
             return productoUpdate
         }
 
-    deleteByIdNumber(id){
-        const borrarProducto = models.productos.deleteOne({id: parseInt(id)})
+    async deleteByIdNumber(id){
+        const dato = await this.getAll()
+            const pos = dato.findIndex(prod => prod.id === parseInt(id))
+            if (pos < 0){
+                return undefined
+            }
+        const borrarProducto = await models.deleteOne({id: parseInt(id)})
         console.log('Producto borrado correctamente')
         return borrarProducto;
         }

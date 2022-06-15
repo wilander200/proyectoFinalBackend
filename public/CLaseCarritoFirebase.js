@@ -22,7 +22,6 @@ class ClaseCarrito {
     
     async saveCarrito() {
         let dato = await (await this.carrito.get()).docs
-        console.log(" el dato es",dato)
         let id
         if (dato.length == 0 ) {
             id = 0;
