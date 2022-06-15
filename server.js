@@ -1,9 +1,9 @@
-import express from 'express'
-import { Router } from 'express'
+const express = require('express')
+const {Router} = express
 //import ClaseProductos from './public/ClaseProductos.js'
 //import ClaseCarrito from './public/ClaseCarrito.js'
-import ClaseProductosMongoDB from './public/ClaseProductosMongoDB.js'
-import ClaseCarritoFirebase from './public/CLaseCarritoFirebase.js'
+const ClaseProductosMongoDB= require('./public/ClaseProductosMongoDB.js')
+const ClaseCarritoFirebase = require('./public/CLaseCarritoFirebase.js')
 
 const app = express()
 
@@ -14,7 +14,7 @@ const productosMDB = new ClaseProductosMongoDB();
 const carritoFB = new ClaseCarritoFirebase()
 
 app.use(express.urlencoded({extended: true}))
-app.use(express.json())
+//app.use(express.json())
 
 const admin = true
 
@@ -31,33 +31,34 @@ routerCarrito.use(express.json())
 
 /* SECCION PARA LOS PRODUCTOS */
 
-routerProductos.get('/:id?', (req , res) => {
+routerProductos.get('/:id?', async function(req , res) {
     let {id} = req.params
     //const verificador = productos.getAll()
-    const verificador = productosMDB.getAll()
-    if (verificador.length <= 0) {
+    const verificador = await productosMDB.getAll()
+    console.log('lo que viene del constructor ' , verificador)
+    if (/* verificador.length <= 0 */ false) {
         const error = (JSON.stringify({error:'No tiene ningun producto guardado'}))
         return res.send(error)
     } else {
         if (parseInt(id) > 0) {
             //const producto = productos.getById(id)
-            const producto = productosMDB.getById(id)
+            const producto = await productosMDB.getById(id)
         if (producto === undefined) {
             const error = (JSON.stringify({error:'Producto no encontrado'}))
             return res.send(error)
         }
             //res.send(productos.getById(id))
-            res.send(productosMDB.getById(id))
+            res.send(await productosMDB.getById(id))
         } else {
             //res.send(productos.getAll())
-            res.send(productosMDB.getAll())
+            res.jsonp(await productosMDB.getAll())
         }
     }
 } )
 
 routerProductos.post('/', (req , res) => {
     if (admin) {
-        producto = req.body
+        const producto = req.body
         //productos.saveProducto(producto)
         productosMDB.saveProducto(producto)
         //res.send(productos.getAll())

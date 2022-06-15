@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const productosCollection = 'productos'
 
@@ -13,4 +13,4 @@ const productosSchema = new mongoose.Schema({
     stock: {type: Number, required: true},
 })
 
-export const productos = mongoose.model(productosCollection, productosSchema)
+module.exports = mongoose.model(productosCollection, productosSchema)

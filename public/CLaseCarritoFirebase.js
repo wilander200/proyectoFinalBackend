@@ -1,9 +1,19 @@
+const admin = require("firebase-admin");
 
+const serviceAccount = require("../models/backendproyfinal-firebase-adminsdk-6ubw6-dcfc09c4b4.json");
+
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+console.log('conectado a firebase correctamente')
+
+const db = admin.firestore()
 
 class ClaseCarrito {
-    constructor (file){
-        this.file = file;
-        this.newProducto = []
+    constructor (){
+        this.newProducto = db.collection("carrito")
     }
 
     saveCarrito() {
@@ -126,4 +136,4 @@ class ClaseCarrito {
 
 }
 
-export default ClaseCarrito;
+module.exports = ClaseCarrito;
