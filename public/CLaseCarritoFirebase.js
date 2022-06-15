@@ -1,6 +1,8 @@
+const { query, json } = require("express");
 const admin = require("firebase-admin");
 
 const serviceAccount = require("../models/backendproyfinal-firebase-adminsdk-6ubw6-dcfc09c4b4.json");
+const { discriminators } = require("../models/productos");
 
 
 admin.initializeApp({
@@ -13,12 +15,14 @@ const db = admin.firestore()
 
 class ClaseCarrito {
     constructor (){
-        this.newProducto = db.collection("carrito")
+        this.carrito = db.collection("carrito")
+        this.newProducto = []
     }
 
-    saveCarrito() {
-        const contenido = fs.readFileSync(this.file, 'utf-8')
-        let dato = JSON.parse(contenido);
+    
+    async saveCarrito() {
+        let dato = await (await this.carrito.get()).docs
+        console.log(" el dato es",dato)
         let id
         if (dato.length == 0 ) {
             id = 0;
@@ -27,111 +31,35 @@ class ClaseCarrito {
         }
         id++
         const timestamp = Date.now()
-        dato.push({id: id, timestamp: timestamp, productos: this.newProducto})
-        fs.writeFileSync(this.file , JSON.stringify(dato, null, 2), error => {
-            if (error) {
-                console.log("hubo un error al escribir el carrito")
-            } else {
-                console.log("se pudo crear el carrito correctamente")
-            }
-        }
-        )
+        let doc = await this.carrito.doc(id.toString())
+        await doc.create({timestamp: timestamp, productos: this.newProducto})
+        console.log(id)
         return id
             }
 
-    deleteCarritoById(id){
-        const arrayProductos = fs.readFileSync(this.file, 'utf-8')
-        let dato =  JSON.parse(arrayProductos);
+    async deleteCarritoById(id){
 
-        const pos = dato.findIndex(prod => prod.id === parseInt(id))
-        if (pos < 0){
-            return undefined
-        }
-
-        const findProduct = dato.filter(prod => prod.id !== parseInt(id))
-        fs.writeFileSync(this.file , JSON.stringify(findProduct, null, 2), error => {
-            if (error) {
-                console.log("hubo un error al borrar")
-            } else {
-                console.log("se pudo borrar el item con el ID indicado")
-            }
-        }
-        )
-        return dato
+        let dato =  await this.carrito.doc(id).delete()
+        return console.log('se borro correctamente', dato.data());
     }
 
-    getCarritoById(id) {
-        const arrayCarritos = fs.readFileSync(this.file, 'utf-8')
-            let dato =  JSON.parse(arrayCarritos);
-
-            const pos = dato.findIndex(dat => dat.id === parseInt(id))
-            if (pos < 0){
-                return undefined
-            }
-            const findCarrito = dato.find(prod => prod.id === parseInt(id))
-            return (findCarrito);
-            }
+    async getCarritoById(id) {
+        let dato = await this.carrito.doc(id).get()
+        return (dato.data());
+    }
     
-    saveProductoInCarrito({id , producto}) {
-        const contenido = fs.readFileSync(this.file, 'utf-8')
-
-        let dato = JSON.parse(contenido);
-        const pos = dato.findIndex(prod => prod.id === parseInt(id))
-
-        if (pos < 0){
-            return undefined
-        }
-        
-        const findCarrito = dato.find(prod => prod.id === parseInt(id))
-        const timestamp = findCarrito.timestamp
-
+    async saveProductoInCarrito({id , producto}) {
         this.newProducto.push(producto)
 
-        const newCarrito = {id: parseInt(id), timestamp , productos: this.newProducto}
-        dato.splice(pos, 1 , newCarrito)
-
-        fs.writeFileSync(this.file , JSON.stringify(dato, null, 2), error => {
-            if (error) {
-                console.log("hubo un error al escribir el carrito")
-            } else {
-                console.log("se pudo crear el carrito correctamente")
-            }
-        }
-        )
+        await this.carrito.doc(id).update({productos: this.newProducto})
+        return
             }
 
-    deleteProdInCarrito(id, id_prod){
-        const arrayCarritos = fs.readFileSync(this.file, 'utf-8')
-        let dato =  JSON.parse(arrayCarritos);
-
-        const pos = dato.findIndex(prod => prod.id === parseInt(id))
-        if (pos < 0){
-            return undefined
-        }
-
-        const findCarrito = dato.filter(prod => prod.id == parseInt(id))
-        const findProductos = findCarrito[0]
-        const timestamp = findProductos.timestamp
-        const deleteProduct = findProductos.productos
-
-        const posProd = deleteProduct.findIndex(prod => prod.id === parseInt(id_prod))
-        if (posProd < 0){
-            return undefined
-        }
-
-        this.newProducto = deleteProduct.filter(prod => prod.id !== parseInt(id_prod))
-        const newCarrito = {id: parseInt(id), timestamp , productos: this.newProducto}
-        dato.splice(pos, 1 , newCarrito)
-
-        fs.writeFileSync(this.file , JSON.stringify(dato, null, 2), error => {
-            if (error) {
-                console.log("hubo un error al borrar")
-            } else {
-                console.log("se pudo borrar el item con el ID indicado")
-            }
-        }
-        )
-        return dato
+    async deleteProdInCarrito(id, id_prod){
+        let productoBorrado = this.newProducto.filter(prod => prod.id !== parseInt(id_prod))
+        console.log(productoBorrado)
+        await this.carrito.doc(id).update({productos: productoBorrado})
+        return
     }
 
 }

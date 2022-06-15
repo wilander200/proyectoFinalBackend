@@ -105,16 +105,16 @@ routerProductos.delete('/:id', (req , res) => {
 
 /* SECCION PARA EL CARRITO */
 
-routerCarrito.post('/', (req , res) => {
+routerCarrito.post('/', async (req , res) => {
     //let id = carritos.saveCarrito()
-    let id = carritoFB.saveCarrito()
+    let id = await carritoFB.saveCarrito()
     res.send(`El ID del carrito es: ${id}`)
 })
 
-routerCarrito.delete('/:id', (req , res) => {
+routerCarrito.delete('/:id', async (req , res) => {
         let {id} = req.params
         //const carrito = carritos.deleteCarritoById(id)
-        const carrito = carritoFB.deleteCarritoById(id)
+        const carrito = await carritoFB.deleteCarritoById(id)
         if (carrito === undefined) {
             const error = (JSON.stringify({error:'Producto no encontrado'}))
             return res.send(error)
@@ -122,29 +122,29 @@ routerCarrito.delete('/:id', (req , res) => {
         res.send(`Se elimina el carrito con el ID: ${id}`)
 })
 
-routerCarrito.get('/:id/productos', (req , res) => {
+routerCarrito.get('/:id/productos', async (req , res) => {
     let {id} = req.params
     if (parseInt(id) > 0) {
         //const producto = carritos.getCarritoById(id)
-        const producto = carritoFB.getCarritoById(id)
+        const producto = await carritoFB.getCarritoById(id)
         if (producto === undefined) {
             const error = (JSON.stringify({error:'Producto no encontrado'}))
             return res.send(error)
         }
         //res.send(carritos.getCarritoById(id))
-        res.send(carritoFB.getCarritoById(id))
+        res.jsonp(await carritoFB.getCarritoById(id))
     } else {
         res.send(`No se puede colocar un ID menor o igual a cero (0)`)
     }
 });
 
-routerCarrito.post('/:id/productos', (req , res) => {
+routerCarrito.post('/:id/productos', async (req , res) => {
         let {id} = req.params
         let producto = req.body
         //carritos.saveProductoInCarrito({id, producto})
-        carritoFB.saveProductoInCarrito({id, producto})
+        await carritoFB.saveProductoInCarrito({id, producto})
         //res.send(carritos.getCarritoById(id))
-        res.send(carritoFB.getCarritoById(id))
+        res.jsonp(await carritoFB.getCarritoById(id))
 })
 
 routerCarrito.delete('/:id/productos/:id_prod', (req , res) => {
