@@ -38,9 +38,9 @@ class ClaseCarrito {
             }
 
     async deleteCarritoById(id){
-
-        let dato =  await this.carrito.doc(id).delete()
-        return console.log('se borro correctamente', dato.data());
+        let dato = await this.carrito.doc(id).get()
+        await this.carrito.doc(id).delete()
+        return (dato.data());
     }
 
     async getCarritoById(id) {
@@ -52,13 +52,15 @@ class ClaseCarrito {
         this.newProducto.push(producto)
 
         await this.carrito.doc(id).update({productos: this.newProducto})
-        return
+        
+        let dato = await this.carrito.doc(id).get()
+        return (dato.data());
             }
 
     async deleteProdInCarrito(id, id_prod){
         let productoBorrado = this.newProducto.filter(prod => prod.id !== parseInt(id_prod))
-        console.log(productoBorrado)
         await this.carrito.doc(id).update({productos: productoBorrado})
+        
         return
     }
 

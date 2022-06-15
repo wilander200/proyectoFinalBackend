@@ -116,7 +116,7 @@ routerCarrito.delete('/:id', async (req , res) => {
         //const carrito = carritos.deleteCarritoById(id)
         const carrito = await carritoFB.deleteCarritoById(id)
         if (carrito === undefined) {
-            const error = (JSON.stringify({error:'Producto no encontrado'}))
+            const error = (JSON.stringify({error:'Carrito no encontrado'}))
             return res.send(error)
         }
         res.send(`Se elimina el carrito con el ID: ${id}`)
@@ -128,7 +128,7 @@ routerCarrito.get('/:id/productos', async (req , res) => {
         //const producto = carritos.getCarritoById(id)
         const producto = await carritoFB.getCarritoById(id)
         if (producto === undefined) {
-            const error = (JSON.stringify({error:'Producto no encontrado'}))
+            const error = (JSON.stringify({error:'Carrito no encontrado'}))
             return res.send(error)
         }
         //res.send(carritos.getCarritoById(id))
@@ -141,20 +141,31 @@ routerCarrito.get('/:id/productos', async (req , res) => {
 routerCarrito.post('/:id/productos', async (req , res) => {
         let {id} = req.params
         let producto = req.body
-        //carritos.saveProductoInCarrito({id, producto})
-        await carritoFB.saveProductoInCarrito({id, producto})
-        //res.send(carritos.getCarritoById(id))
-        res.jsonp(await carritoFB.getCarritoById(id))
+        if (parseInt(id) > 0) {
+            const carrito = await carritoFB.getCarritoById(id)
+            if (carrito === undefined) {
+                const error = (JSON.stringify({error:'Carrito no encontrado'}))
+                return res.send(error)
+            }
+            //carritos.saveProductoInCarrito({id, producto})
+            await carritoFB.saveProductoInCarrito({id, producto})
+            //res.send(carritos.getCarritoById(id))
+            res.jsonp(await carritoFB.getCarritoById(id))
+        } else {
+            res.send(`No se puede colocar un ID de carrito menor o igual a cero (0)`)
+        }
+        
 })
 
-routerCarrito.delete('/:id/productos/:id_prod', (req , res) => {
+routerCarrito.delete('/:id/productos/:id_prod', async (req , res) => {
     let {id , id_prod} = req.params
     //const carrito = carritos.deleteProdInCarrito(id , id_prod)
-    const carrito = carritoFB.deleteProdInCarrito(id , id_prod)
+    const carrito = await carritoFB.getCarritoById(id)
     if (carrito === undefined) {
-        const error = (JSON.stringify({error:'Producto no encontrado en el carrito'}))
+        const error = (JSON.stringify({error:'Carrito no encontrado en el carrito'}))
         return res.send(error)
     }
+    await carritoFB.deleteProdInCarrito(id , id_prod)
     res.send(`Se elimina el producto con ID: ${id_prod}, del carrito con el ID: ${id}`)
 })
 
