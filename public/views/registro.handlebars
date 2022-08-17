@@ -1,0 +1,41 @@
+<div class="h-100 w-100 mt-5">
+    <h1 class="text-primary text-center my-4 ">REGISTRO DE USUARIO</h1>
+    <form class="w-75 mx-auto d-flex-column justify-content-around" action="/api/registro" method="POST">
+        <div class="mb-3">
+            <label for="user" class="form-label">Ingrese su nombre y apellido</label>
+            <input type="text" class="form-control" name="user">
+        </div>
+        <div class="mb-3">
+            <label for="address" class="form-label">Ingrese su direccion</label>
+            <input type="text" class="form-control" name="address">
+        </div>
+        <div class="mb-3">
+            <label for="age" class="form-label">Ingrese su edad</label>
+            <input type="text" class="form-control" name="age">
+        </div>
+        <div class="mb-3">
+            <label for="phonenumber" class="form-label">Ingrese su número de telefono</label>
+            <input type="tel" class="form-control" name="phonenumber">
+        </div>
+        <div class="mb-3">
+            <label for="avatar" class="form-label">Ingrese Avatar</label>
+            <input type="file" class="form-control" name="avatar">
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">Ingrese su email</label>
+            <input type="email" class="form-control" name="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Ingrese su contraseña</label>
+            <input type="password" class="form-control" name="password" required>
+        </div>
+        <div class="d-flex justify-content-around align-items-center">
+            <button class="btn btn-outline-primary h-50" >Registrar</button>
+        </div>    
+    </form>
+    <form class="w-75 mx-auto d-flex justify-content-around my-2" action="/api/login" method="GET">
+        <div class="d-flex justify-content-around align-items-center">
+            <button class="btn btn-outline-primary" >Login de usuario</button>
+        </div>    
+    </form>
+</div>

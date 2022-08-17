@@ -1,0 +1,54 @@
+<div class="mt-4">
+<div class="d-flex justify-content-around">
+<form class="" action="/api/productos" method="GET">
+            <div class="d-flex justify-content-around align-items-center">
+                <button class="btn btn-outline-primary h-50" >HOME</button>
+            </div>    
+</form>
+<form class="" action="/api/logout" method="GET">
+            <div class="d-flex justify-content-around align-items-center">
+                <button class="btn btn-outline-primary h-50" >Datos de usuario</button>
+            </div>    
+</form> 
+<form class="" action="/api/logout" method="POST">
+            <div class="d-flex justify-content-around align-items-center">
+                <button class="btn btn-outline-primary h-50" >SALIR</button>
+            </div>    
+</form> 
+</div>
+{{!-- listado con todos los productos dentro del carrito --}}
+
+<div class="h-100 w-100 mt-5">
+    {{#if productoTrue}}
+    <div class="table w-75 mx-auto">
+        <table class="table table-light table-striped">
+            <tr>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Descripción</th>
+                <th class="text-center">Stock</th>
+                <th class="text-center">Precio</th>
+                <th class="text-center">Codigo</th>
+                <th class="text-center">Foto</th>
+            </tr>
+            {{#each producto}}
+            <tr>
+                <td class="text-center">{{this.name}}</td>
+                <td class="text-center">{{this.description}}</td>
+                <td class="text-center">{{this.stock}}</td>
+                <td class="text-center">{{this.price}}</td>
+                <td class="text-center">{{this.codigo}}</td>
+                <td class="text-center"><img width="50" src={{this.thumbnail}} alt="not found"></td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+    {{else}}
+    <h3 class="alert alert-danger">No hay productos</h3>
+    {{/if}}
+    </div>
+    <form class="" action="/api/pago" method="POST">
+            <div class="d-flex justify-content-around align-items-center">
+                <button class="btn btn-outline-danger h-50" >TERMINAR COMPRA</button>
+            </div>    
+    </form> 
+</div>
