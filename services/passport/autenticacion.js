@@ -1,9 +1,7 @@
-const express = require('express')
-const session = require('express-session')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-const ClassUserMDB = require('../api/ClaseUsuariosMDB.js')
-const ServidorMensajeria = require('../../utils/mensajeria.js')
+const ClassUserMDB = require('../../DAO/ClaseUsuariosMDB.js')
+const ServidorMensajeria = require('../mensajeria/mensajeria.js')
 
 const userClass = new ClassUserMDB()
 const msjNodemailer = new ServidorMensajeria()

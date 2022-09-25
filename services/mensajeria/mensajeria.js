@@ -1,7 +1,6 @@
 const nodemailer = require('nodemailer')
-const { getMaxListeners } = require('../models/user')
 const dotenv = require('dotenv').config()
-const logger = require('./logger.js')
+const logger = require('../../utils/logger.js')
 const twilio = require('twilio')
 
 

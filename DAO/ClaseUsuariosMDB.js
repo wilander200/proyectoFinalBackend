@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const models = require("../../models/user.js")
+const models = require("../models/user.js")
 const bcrypt = require('bcryptjs')
 const dotenv = require('dotenv').config()
-const logger = require('../../utils/logger.js')
+const logger = require('../utils/logger.js')
 
 ReadFromDB();
 

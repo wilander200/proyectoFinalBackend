@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const models = require("../../models/productos.js")
+const models = require("../models/productos.js")
 const dotenv = require('dotenv').config()
-const logger = require('../../utils/logger.js')
+const logger = require('../utils/logger.js')
 
 ReadFromDB();
 

@@ -1,9 +1,10 @@
 const express = require('express')
+const cors = require('cors')
 const { Server: HttpServer } = require('http')
 const dotenv = require('dotenv').config()
 const handlebars = require('express-handlebars')
 const logger = require('./utils/logger.js')
-require('./src/passport/autenticacion.js')
+require('./services/passport/autenticacion.js')
 const passport = require('passport')
 const session = require('express-session')
 const cookieParser = require('cookie-parser')
@@ -41,6 +42,7 @@ if ((MODO == 'cluster') && cluster.isPrimary) {
     //Midelwares
 
     const app = express()
+    app.use(cors())
     const httpServer = new HttpServer(app)
     app.use(express.urlencoded({extended: true}))
     app.use(express.static('public'))
@@ -87,7 +89,7 @@ if ((MODO == 'cluster') && cluster.isPrimary) {
     /* CONTROL DEL ERROR DE LA RUTA */
 
     app.use((req, res) => {
-        res.status(404).send({error: "Error 404", descripcion: "Ruta no admitida"})
+        res.status(404).send({error: "Error 404", descripcion: "Ruta no encontrada"})
     })
 
     //CONFIGURANDO EL PUERTO DE ESCUCHA DEL SERVIDOR

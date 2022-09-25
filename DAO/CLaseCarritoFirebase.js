@@ -1,8 +1,8 @@
 const admin = require("firebase-admin");
-const logger = require('../../utils/logger.js')
+const logger = require('../utils/logger.js')
 
-const serviceAccount = require("../../models/backendproyfinal-firebase-adminsdk-6ubw6-dcfc09c4b4.json");
-const { discriminators } = require("../../models/productos.js");
+const serviceAccount = require("../models/backendproyfinal-firebase-adminsdk-6ubw6-dcfc09c4b4.json");
+const { discriminators } = require("../models/productos.js");
 
 
 admin.initializeApp({
