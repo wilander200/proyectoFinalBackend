@@ -5,11 +5,6 @@
                 <button class="btn btn-outline-primary h-50" >CARRITO</button>
             </div>    
 </form>
-<form class="" action="/api/logout" method="GET">
-            <div class="d-flex justify-content-around align-items-center">
-                <button class="btn btn-outline-primary h-50" >DATOS DE USUARIO</button>
-            </div>    
-</form> 
 <form class="" action="/api/logout" method="POST">
             <div class="d-flex justify-content-around align-items-center">
                 <button class="btn btn-outline-primary h-50" >CERRAR SESION</button>
@@ -22,12 +17,21 @@
     <div class="table w-75 mx-auto">
         <table class="table table-light table-striped">
             <tr>
-                <th class="text-center">productos</th>
-
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Precio</th>
+                <th class="text-center">Stock</th>
+                <th class="text-center">Descripción</th>
+                <th class="text-center">Codigo</th>
+                <th class="text-center">Foto</th>
             </tr>
             {{#each producto}}
             <tr>
-                <td class="text-center">{{this}}</td>
+                <td class="text-center">{{this.name}}</td>
+                <td class="text-center">{{this.price}}</td>
+                <td class="text-center">{{this.stock}}</td>
+                <td class="text-center">{{this.description}}</td>
+                <td class="text-center">{{this.codigo}}</td>
+                <td class="text-center"><img width="50" src={{this.thumbnail}} alt="not found"></td>
             </tr>
             {{/each}}
         </table>

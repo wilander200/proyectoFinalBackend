@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const models = require("../models/productos.js")
 const dotenv = require('dotenv').config()
 const logger = require('../utils/logger.js')
+const tranfProdDto = require('../DTO/productos.js')
 
 ReadFromDB();
 
@@ -26,12 +27,12 @@ class ClaseProductos {
 
     async getById(id) {
         const findProduct = await models.productos.find({id: parseInt(id)})
-            return (findProduct);
+            return tranfProdDto(findProduct);
             }
 
     async getAll() {
         const productos = await models.find()
-        return productos
+        return tranfProdDto(productos)
     }
 
     async saveProducto({name, description, codigo, price, stock, thumbnail}) {
@@ -54,7 +55,7 @@ class ClaseProductos {
             thumbnail: thumbnail})
 
         logger.info("se pudo guardar el producto correctamente")
-        return nuevoProducto;
+        return tranfProdDto(nuevoProducto);
     }
 
     async saveProductoById(id, {name, description, codigo, price, stock, thumbnail}) {
@@ -76,7 +77,7 @@ class ClaseProductos {
                 thumbnail: thumbnail}})
 
             logger.info('se actualizo el producto correctamente')
-            return productoUpdate
+            return tranfProdDto(productoUpdate)
         }
 
     async deleteByIdNumber(id){
@@ -87,7 +88,7 @@ class ClaseProductos {
             }
         const borrarProducto = await models.deleteOne({id: parseInt(id)})
         logger.info('Producto borrado correctamente')
-        return borrarProducto;
+        return tranfProdDto(borrarProducto);
         }
 }
 
