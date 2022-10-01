@@ -2,7 +2,6 @@ const admin = require("firebase-admin");
 const logger = require('../utils/logger.js')
 
 const serviceAccount = require("../models/backendproyfinal-firebase-adminsdk-6ubw6-dcfc09c4b4.json");
-const { discriminators } = require("../models/productos.js");
 
 
 admin.initializeApp({
@@ -58,8 +57,8 @@ class ClaseCarrito {
     async deleteProdInCarrito(id, id_prod){
         let productoBorrado = this.newProducto.filter(prod => prod.id !== parseInt(id_prod))
         await this.carrito.doc(id).update({productos: productoBorrado})
-        
-        return
+        let dato = await this.carrito.doc(id).get()
+        return (dato.data());
     }
 
 }
